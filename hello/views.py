@@ -1,21 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .models import Greeting
+import requests
 
 # Create your views here.
 def index(request):
-    return HttpResponse('Hello from Python!')
+    
+    query = 'http://www.patentsview.org/api/patents/query?q={"_and":[{"inventor_last_name":"Jobs"},{"assignee_lastknown_country":"US"}]}&f=["patent_number"]'
+    
+    result = requests.get(query)
+    return HttpResponse('{}'.format(result))
     #return render(request, 'index.html')
     #return "hello"
 
 
-def db(request):
 
-    greeting = Greeting()
-    greeting.save()
-
-    greetings = Greeting.objects.all()
-
-    return render(request, 'db.html', {'greetings': greetings})
 
