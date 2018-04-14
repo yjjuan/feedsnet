@@ -11,7 +11,7 @@ def index(request):
     query = 'https://api.mlab.com/api/1/databases/yjjuan01/collections/test?apiKey=ITT5lmoZVIkElhBjGP7IYrreM4Jv0OmI'
     
     result = requests.get(query)
-    response = json.loads(result)
+    response = json.loads(result.text)
     return HttpResponse(response[-1])
     #return render(request, 'index.html')
     #return "hello"
