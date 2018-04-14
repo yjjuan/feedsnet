@@ -12,8 +12,17 @@ def index(request):
     
     result = requests.get(query)
     response = json.loads(result.text)
+    
+    Lambda_str = response[-2]['lamda']
+    Lambda = Lambda_str[1:-1].split(', ')
+    
+    intensity_str = response[-1]['intensity']
+    intensity = intensity_str[1:-1].split(', ')
+    
+    spectrum = [[Lambda[i],intensity[i]] for i in range(len(Lambda))]
     #return HttpResponse(response[-1]['intensity'])
-    return render(request, 'highchart.html')
+    return render(request, 'highchart.html',
+                  {'spectrum':spectrum})
     #return "hello"
 
 
