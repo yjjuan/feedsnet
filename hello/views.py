@@ -12,7 +12,7 @@ def index(request):
     
     result = requests.get(query)
     response = json.loads(result.text)
-    return HttpResponse(response[-1])
+    return HttpResponse(response[-1]['intensity'])
     #return render(request, 'index.html')
     #return "hello"
 
