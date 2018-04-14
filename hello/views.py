@@ -19,10 +19,10 @@ def index(request):
     intensity_str = response[-1]['intensity']
     intensity = intensity_str[1:-1].split(', ')
     
-    spectrum = [[Lambda[i],intensity[i]] for i in range(len(Lambda))]
+    spectrum = [[float(Lambda[i]),float(intensity[i])] for i in range(len(Lambda))]
     print(spectrum)
     #return HttpResponse(response[-1]['intensity'])
-    return render(request, 'highchart2.html',
+    return render(request, 'highchart3.html',
                   {'spectrum':spectrum})
     #return "hello"
 

@@ -12,6 +12,11 @@
 var spectrum = {{spectrum|safe}};
 
 $(document).ready(function() {
+   var chart = {
+   type: 'scatter',
+   zoomType: 'xy'
+	};
+   
    var title = {
        text: 'tea spectrum'   
    };
@@ -48,8 +53,9 @@ $(document).ready(function() {
    var series =  [
       {
          name: 'spectrum',
-         data: [[spectrum[0][0],spectrum[0][1]],
-		 [spectrum[1][0],spectrum[1][1]]]
+		 type: 'scatter',
+         data: [[0,1],
+		 [1,0]]
       }
    ];
 
