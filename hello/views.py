@@ -12,8 +12,8 @@ def index(request):
     
     result = requests.get(query)
     response = json.loads(result.text)
-    return HttpResponse(response[-1]['intensity'])
-    #return render(request, 'index.html')
+    #return HttpResponse(response[-1]['intensity'])
+    return render(request, 'highchart.html')
     #return "hello"
 
 
