@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 import requests
+import json
 
 # Create your views here.
 def index(request):
@@ -10,8 +11,8 @@ def index(request):
     query = 'https://api.mlab.com/api/1/databases/yjjuan01/collections/test?apiKey=ITT5lmoZVIkElhBjGP7IYrreM4Jv0OmI'
     
     result = requests.get(query)
-    response = json.loads(result.text)
-    return HttpResponse(response[-1])
+    #response = json.loads(result.text)
+    return HttpResponse(result)
     #return render(request, 'index.html')
     #return "hello"
 
