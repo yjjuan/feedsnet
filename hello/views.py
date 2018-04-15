@@ -3,6 +3,7 @@ from django.http import HttpResponse
 
 import requests
 import json
+import pickle
 
 # Create your views here.
 def index(request):
