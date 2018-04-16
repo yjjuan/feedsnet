@@ -26,17 +26,17 @@ def index(request):
     intensity = intensity_str[1:-1].split(', ')
     
     spectrum = [[float(Lambda[i]),float(intensity[i])] for i in range(len(Lambda))]
-<<<<<<< HEAD
+
     #print(spectrum)
     #return HttpResponse(response[-1]['intensity'])
     return render(request, 'highchart5.html',
                   {'spectrum':spectrum})
-=======
-    print(spectrum)
-    return HttpResponse(clf)
+
+    #print(spectrum)
+    #return HttpResponse(clf)
     #return render(request, 'highchart4.html',
     #              {'spectrum':spectrum})
->>>>>>> a562d75d2f2424b59f3405ac21a79375da5a97e8
+
     #return "hello"
 
 
