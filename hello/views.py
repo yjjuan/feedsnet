@@ -5,7 +5,7 @@ import requests
 import json
 import pickle
 import os
-import .deployExplainer
+from .deployExplainer import explainer
 import numpy as np
 
 # Create your views here.
@@ -22,7 +22,7 @@ def index(request):
     categorical_features = [2,3]
     categorical_names = {2:['False','True'], 3:['False','True']}
     
-    explainer = deployExplainer.explainer(train,feature_names = feature_names,class_names=class_names,
+    explainer = explainer(train,feature_names = feature_names,class_names=class_names,
                                 categorical_features=categorical_features,
                                 categorical_names=categorical_names, kernel_width=3)
     
