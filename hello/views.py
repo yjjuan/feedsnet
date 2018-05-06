@@ -26,9 +26,14 @@ def index(request):
                                 categorical_features=categorical_features,
                                 categorical_names=categorical_names, kernel_width=3)
     
+    explan = exp.explain(model, np.array([0, 5, 1, 0]))
+    desc_list = [explan[i]['desc'] for i in explan]
+    weight_list = [explan[i]['weight'] for i in explan]
+    
     #print(explainer.explain(model, np.array([0, 5, 1, 0])))
-    return HttpResponse(exp.explain(model, np.array([0, 5, 1, 0])))
-
+    #return HttpResponse(exp.explain(model, np.array([0, 5, 1, 0])))
+    return render(request, 'highchart6.html',
+                  {'desc_list':desc_list, 'weight_list':weight_list})
     '''
     cur_dir = os.path.dirname(__file__)
     clf = pickle.load(open(os.path.join(cur_dir,
