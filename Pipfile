@@ -11,6 +11,7 @@ gunicorn = "*"
 django-heroku = "*"
 requests = "*"
 numpy = "*"
+lime = "*"
 
 [requires]
 

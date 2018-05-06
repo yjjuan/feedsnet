@@ -22,12 +22,12 @@ def index(request):
     categorical_features = [2,3]
     categorical_names = {2:['False','True'], 3:['False','True']}
     
-    explainer = explainer(train,feature_names = feature_names,class_names=class_names,
+    exp = explainer(train,feature_names = feature_names,class_names=class_names,
                                 categorical_features=categorical_features,
                                 categorical_names=categorical_names, kernel_width=3)
     
     #print(explainer.explain(model, np.array([0, 5, 1, 0])))
-    return HttpResponse(explainer.explain(model, np.array([0, 5, 1, 0])))
+    return HttpResponse(exp.explain(model, np.array([0, 5, 1, 0])))
 
     '''
     cur_dir = os.path.dirname(__file__)
