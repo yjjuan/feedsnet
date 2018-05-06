@@ -5,10 +5,31 @@ import requests
 import json
 import pickle
 import os
+import .deployExplainer
+import numpy as np
 
 # Create your views here.
 def index(request):
+
+    cur_dir = os.path.dirname(__file__)
+    train = pickle.load(open(os.path.join(cur_dir,
+                      'train.pickle'), 'rb'))    
+    model = pickle.load(open(os.path.join(cur_dir,
+                      'classifier.pickle'), 'rb'))    
+
+    feature_names = ['familySize','citedby_patent_count','iprFlag','reissued_combined']
+    class_names = ['unmonetized','monetized']
+    categorical_features = [2,3]
+    categorical_names = {2:['False','True'], 3:['False','True']}
     
+    explainer = deployExplainer.explainer(train,feature_names = feature_names,class_names=class_names,
+                                categorical_features=categorical_features,
+                                categorical_names=categorical_names, kernel_width=3)
+    
+    #print(explainer.explain(model, np.array([0, 5, 1, 0])))
+    return HttpResponse(explainer.explain(model, np.array([0, 5, 1, 0])))
+
+    '''
     cur_dir = os.path.dirname(__file__)
     clf = pickle.load(open(os.path.join(cur_dir,
                       'patent_list.pickle'), 'rb'))
@@ -31,7 +52,7 @@ def index(request):
     #return HttpResponse(response[-1]['intensity'])
     return render(request, 'highchart5.html',
                   {'spectrum':spectrum})
-
+    '''
     #print(spectrum)
     #return HttpResponse(clf)
     #return render(request, 'highchart4.html',
