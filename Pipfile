@@ -12,7 +12,6 @@ django-heroku = "*"
 requests = "*"
 numpy = "*"
 lime = "*"
-urllib = "*"
 
 [requires]
 
