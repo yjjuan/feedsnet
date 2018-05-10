@@ -34,7 +34,9 @@ class explainer:
         for i in range(self.training_data.shape[1]):
             final_exp[i] = dict()
             if i in self.categorical_features:
-                final_exp[i]['desc'] = exp.__dict__['domain_mapper'].__dict__['discretized_feature_names'][i]
+                original_desc = exp.__dict__['domain_mapper'].__dict__['discretized_feature_names'][i]
+                desc_list = original_desc.split('=')
+                final_exp[i]['desc'] = ' is '.join(desc_list)
             else:
                 # Operation on numerical features
                 boundary = np.percentile(self.training_data[:,i],(0,25,50,75,100))
