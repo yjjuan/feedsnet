@@ -1,0 +1,138 @@
+
+
+
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Monetiz Advisor</title>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/bullet.js"></script>
+</head>
+<body>
+<h1><u>Patent Profile</u></h1>
+<blockquote>Patent number: {{patent_number}}
+<table border="1">
+    <tr>
+        <th>Family Size</th>
+        <th>Forward citations(citedby_patent_count)</th>
+		<th>Inter-parte review(IPR)</th>
+		<th>Reissue</th>
+    </tr>
+	<tr>
+        <td>{{family_size}}</td>
+		<td>{{fcit}}</td>
+ 		<td>{{ipr}}</td>
+		<td>{{reissue}}</td>		
+    </tr>
+
+</table>
+</blockquote>
+<hr>
+
+<h1><u>Monetization Prediction</u></h2>
+<h2>Model selection</h2>
+<ul>
+<li>Model Elisa is used to predict the monetizaition of this patent.</li>
+<li>Model Elisa is trained on the patents w/ IPC = "Chemistry; Metallurgy"</li>
+</ul>
+
+<h2>Prediction results</h2>
+<blockquote>This patent will be {{pred_class}}. (Probability:{{pred_proba}} %)
+</blockquote>
+<hr>
+
+<h1><u>Model Intepretation</u></h1>
+<div id="container" style="max-width: 800px; height: 400px; margin: 1em auto"> </div>
+<blockquote>Definition:</blockquote>
+<blockquote>Very high: Value lie above the maximum of training data; <br> high: Value lies within top 25%;<br>
+slightly high:Value lies between top 25% and 50%;<br>slightly low: within bottom 25% and 50%;
+<br>low:within bottom 25%;<br>very low: below the minimum</blockquote>
+
+<hr>
+<script>
+var desc_mon = {{desc_mon|safe}};
+var desc_unmon = {{desc_unmon|safe}};
+var weight_mon = {{weight_mon|safe}};
+var weight_unmon = {{weight_unmon|safe}};
+
+$(function(){
+Highcharts.chart('container', {
+  chart: {
+    type: 'bar'
+  },
+  title: {
+    text: ''
+  },
+  subtitle: {
+    text: ''
+  },
+  xAxis: [{
+    title: {
+      text: 'Unmonetization Factors'
+    },
+    categories: desc_unmon,
+    reversed: false,
+    labels: {
+      step: 1,
+	  align: 'right',
+      reserveSpace: true,
+	  x:1
+    }
+  }, { // mirror axis on right side
+    title: {
+      text: 'Monetization Factors'
+    },
+    opposite: true,
+    reversed: false,
+    categories: desc_mon,
+    linkedTo: 0,
+    labels: {
+      step: 1,
+	  align: 'left',
+      reserveSpace: true
+ 
+    }
+  }],
+  yAxis: {
+    title: {
+      text: 'importance'
+    },
+	labels: {
+      formatter: function () {
+        return Math.abs(this.value);
+      }
+
+    }
+  },
+
+  plotOptions: {
+    series: {
+      stacking: 'normal'
+    }
+  },
+  tooltip: {
+    formatter: function () {
+      return '<b>' + this.series.name +  '</b><br/>' +
+        'Weight: ' + Math.abs(this.point.y);
+    }
+  },
+  legend: {
+        enabled: true,
+		reversed: true
+    },
+  series: [{
+    name: 'Mon',
+    data: weight_mon,
+	color: '#FF0000'
+  }, {
+    name: 'Unmon',
+    data: weight_unmon,
+	color: '#00FF19'
+  }]
+});
+
+});
+</script>
+</body>
+</html>

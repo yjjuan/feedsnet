@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Patent Monetiz</title>
+	
+  </head>
+  <body>
+
+<h2>Report1:Please enter your US grant patent number: e.g.7341542</h2>
+<form method=post action="/result/"> {% csrf_token %} 
+
+  <div>
+	  <input type="text" name="patent_number"><br>
+	  <input type=submit value='Submit' name='submit_btn'>
+  </div>
+</form>
+<h2>Report2:Please enter your US grant patent number: e.g.7341542</h2>
+<form method=post action="/result/"> {% csrf_token %} 
+
+  <div>
+	  <input type="text" name="patent_number"><br>
+	  <input type=submit value='Submit' name='submit_btn'>
+  </div>
+</form>
+  </body>
+</html>
