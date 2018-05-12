@@ -49,6 +49,13 @@
 slightly high:Value lies between top 25% and 50%;<br>slightly low: within bottom 25% and 50%;
 <br>low:within bottom 25%;<br>very low: below the minimum</blockquote>
 
+<form method=post action="/"> {% csrf_token %} 
+
+  <div>
+	  
+	  <input type=submit value='Try a new case' name='submit_btn'>
+  </div>
+</form>
 <hr>
 <script>
 var desc_mon = {{desc_mon|safe}};
