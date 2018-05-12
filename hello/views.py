@@ -8,6 +8,7 @@ import pickle
 import os
 from .deployExplainer import explainer
 import numpy as np
+import xml.etree.ElementTree as ET
 
 def ifi_querier(q, fl="", start="0", rows="10", sort="", facet=False, facet_field=False, wt='json'):
     params = {
@@ -24,6 +25,15 @@ def ifi_querier(q, fl="", start="0", rows="10", sort="", facet=False, facet_fiel
     response_in_json = json.loads(response.text)
     return response_in_json
 
+def ifi_ipc(ucid):
+    payload = {'x-password': 'snK3zxC5xn4M2JkN', 'x-user': 'patcloud_prem'}
+    query = "http://cdws.ificlaims.com/text/fetch?ucid=" + ucid
+    response = requests.get(query, headers=payload)
+    root = ET.fromstring(response.text)
+    node=root.findall("./bibliographic-data/technical-data/classifications-ipcr/classification-ipcr")
+    ipc_section = node[0].text[0]
+    return ipc_section
+    
 def ifi_fcit(ucid):
     payload = {'x-password': 'snK3zxC5xn4M2JkN', 'x-user': 'patcloud_prem'}
     query = 'http://cdws.ificlaims.com/citations/forward?ucid=' + ucid
@@ -46,18 +56,34 @@ def index(request):
 def result(request):
 
     cur_dir = os.path.dirname(__file__)
-    train = pickle.load(open(os.path.join(cur_dir,
-                      'train.pickle'), 'rb'))    
-    model = pickle.load(open(os.path.join(cur_dir,
-                      'classifier.pickle'), 'rb')) 
+
     ipr_list = pickle.load(open(os.path.join(cur_dir,
                       'ipr_issueNum.pickle'), 'rb')) 
     
-    ####Start to vectorize this patent
+    #### Get the corresponding ucid for input patent number
     patent_num = request.POST['patent_number']
     resp0 = ifi_querier('pnnum:{} AND pnctry:us'.format(patent_num))
     ucid = resp0['content']['response']['docs'][0]['ucid']
     
+    #### Select IPC-dependent model and training data
+    ipc = ifi_ipc(ucid)
+    if ipc == 'C':
+        train = pickle.load(open(os.path.join(cur_dir,
+                          'train_C.pickle'), 'rb'))    
+        model = pickle.load(open(os.path.join(cur_dir,
+                          'classifier_C.pickle'), 'rb'))  
+        model_name = 'Cathey'
+        model_desc = 'CHEMISTRY; METALLURGY'
+    else:
+        train = pickle.load(open(os.path.join(cur_dir,
+                          'train.pickle'), 'rb'))    
+        model = pickle.load(open(os.path.join(cur_dir,
+                          'classifier.pickle'), 'rb')) 
+        model_name = 'Hibert'
+        model_desc = 'ELECTRICITY'
+        
+    
+    #### Start to vectorize this patent
     resp = ifi_fcit(ucid)
     fcit = len(resp['citations'][0]['ucids'])
     
@@ -102,8 +128,8 @@ def result(request):
     #print(explainer.explain(model, np.array([0, 5, 1, 0])))
     #return HttpResponse(exp.explain(model, np.array([0, 5, 1, 0])))
     return render(request, 'highchart7.html',
-                  {'patent_number':patent_num, 'family_size':case[0],
-                   'fcit':case[1],'ipr':ipr, 
+                  {'patent_number':patent_num, 'model_name':model_name, 'model_desc':model_desc,
+                   'family_size':case[0], 'fcit':case[1],'ipr':ipr, 
                    'reissue':reissue or reissued,'pred_class':pred_class,
                    'pred_proba':pred_proba, 'desc_mon':desc_mon, 
                    'desc_unmon':desc_unmon, 'weight_mon':weight_mon, 
