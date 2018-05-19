@@ -15,7 +15,15 @@
   </div>
 </form>
 <h2>Report2:Please enter your US grant patent number: e.g.7341542, 8409861</h2>
-<form method=post action="/"> {% csrf_token %} 
+<form method=post action="/control_1/"> {% csrf_token %} 
+
+  <div>
+	  <input type="text" name="patent_number"><br>
+	  <input type=submit value='Submit' name='submit_btn'>
+  </div>
+</form>
+<h2>Report3:Please enter your US grant patent number: e.g.7341542, 8409861</h2>
+<form method=post action="/control_2/"> {% csrf_token %} 
 
   <div>
 	  <input type="text" name="patent_number"><br>

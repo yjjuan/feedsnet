@@ -134,37 +134,106 @@ def result(request):
                    'pred_proba':pred_proba, 'desc_mon':desc_mon, 
                    'desc_unmon':desc_unmon, 'weight_mon':weight_mon, 
                    'weight_unmon':weight_unmon})
-    '''
+
+
+def control_1(request):
+
     cur_dir = os.path.dirname(__file__)
-    clf = pickle.load(open(os.path.join(cur_dir,
-                      'patent_list.pickle'), 'rb'))
+
+    ipr_list = pickle.load(open(os.path.join(cur_dir,
+                      'ipr_issueNum.pickle'), 'rb')) 
     
-    #query = 'http://www.patentsview.org/api/patents/query?q={"_and":[{"inventor_last_name":"Jobs"},{"assignee_lastknown_country":"US"}]}&f=["patent_number"]'
-    query = 'https://api.mlab.com/api/1/databases/yjjuan01/collections/test?apiKey=ITT5lmoZVIkElhBjGP7IYrreM4Jv0OmI'
+    #### Get the corresponding ucid for input patent number
+    patent_num = request.POST['patent_number']
+    resp0 = ifi_querier('pnnum:{} AND pnctry:us'.format(patent_num))
+    ucid = resp0['content']['response']['docs'][0]['ucid']
     
-    result = requests.get(query)
-    response = json.loads(result.text)
+    #### Select IPC-dependent model and training data
+    ipc = ifi_ipc(ucid)
+    if ipc == 'C':
+        train = pickle.load(open(os.path.join(cur_dir,
+                          'train_C.pickle'), 'rb'))    
+        model = pickle.load(open(os.path.join(cur_dir,
+                          'classifier_C.pickle'), 'rb'))  
+        model_name = 'Cathey'
+        model_desc = 'CHEMISTRY; METALLURGY'
+    else:
+        train = pickle.load(open(os.path.join(cur_dir,
+                          'train.pickle'), 'rb'))    
+        model = pickle.load(open(os.path.join(cur_dir,
+                          'classifier.pickle'), 'rb')) 
+        model_name = 'Hibert'
+        model_desc = 'ELECTRICITY'
+        
     
-    Lambda_str = response[-2]['lamda']
-    Lambda = Lambda_str[1:-1].split(', ')
+    #### Start to vectorize this patent
+    resp = ifi_fcit(ucid)
+    fcit = len(resp['citations'][0]['ucids'])
     
-    intensity_str = response[-1]['intensity']
-    intensity = intensity_str[1:-1].split(', ')
+    resp = ifi_family(ucid)
+    family_size = len(resp['family']['members'])
     
-    spectrum = [[float(Lambda[i]),float(intensity[i])] for i in range(len(Lambda))]
-
-    #print(spectrum)
-    #return HttpResponse(response[-1]['intensity'])
-    return render(request, 'highchart5.html',
-                  {'spectrum':spectrum})
-    '''
-    #print(spectrum)
-    #return HttpResponse(clf)
-    #return render(request, 'highchart4.html',
-    #              {'spectrum':spectrum})
-
-    #return "hello"
-
-
+    ipr = patent_num in ipr_list
+    
+    response1 = ifi_querier('pnnum:{} AND pnctry:us AND ifi_document_category:reissue'.format(patent_num))
+    reissue = response1['content']['response']['numFound'] > 0
+    response2 = ifi_querier('relpnnum:{} AND ifi_document_category:reissue'.format(patent_num))
+    reissued = response2['content']['response']['numFound'] > 0
+                           
+    case = np.array([family_size, fcit, ipr, reissue or reissued])
+    
+    # Prediction part
+    pred_value = model.predict(case.reshape(1,-1))[0]
+    pred_class = ['monetized' if pred_value == 1 else 'unmonetized'][0]
+    pred_proba = round(model.predict_proba(case.reshape(1,-1))[0][pred_value]*100,2)
 
 
+    return render(request, 'control1.html',
+                  {'patent_number':patent_num, 'model_name':model_name, 'model_desc':model_desc,
+                   'family_size':case[0], 'fcit':case[1],'ipr':ipr, 
+                   'reissue':reissue or reissued,'pred_class':pred_class,
+                   'pred_proba':pred_proba})
+
+def control_2(request):
+
+    cur_dir = os.path.dirname(__file__)
+
+    ipr_list = pickle.load(open(os.path.join(cur_dir,
+                      'ipr_issueNum.pickle'), 'rb')) 
+    
+    #### Get the corresponding ucid for input patent number
+    patent_num = request.POST['patent_number']
+    resp0 = ifi_querier('pnnum:{} AND pnctry:us'.format(patent_num))
+    ucid = resp0['content']['response']['docs'][0]['ucid']
+    
+    #### Select IPC-independent model
+    
+    model = pickle.load(open(os.path.join(cur_dir,
+                      'classifier_mix.pickle'), 'rb'))  
+
+    #### Start to vectorize this patent
+    resp = ifi_fcit(ucid)
+    fcit = len(resp['citations'][0]['ucids'])
+    
+    resp = ifi_family(ucid)
+    family_size = len(resp['family']['members'])
+    
+    ipr = patent_num in ipr_list
+    
+    response1 = ifi_querier('pnnum:{} AND pnctry:us AND ifi_document_category:reissue'.format(patent_num))
+    reissue = response1['content']['response']['numFound'] > 0
+    response2 = ifi_querier('relpnnum:{} AND ifi_document_category:reissue'.format(patent_num))
+    reissued = response2['content']['response']['numFound'] > 0
+                           
+    case = np.array([family_size, fcit, ipr, reissue or reissued])
+    
+    # Prediction part
+    pred_value = model.predict(case.reshape(1,-1))[0]
+    pred_class = ['monetized' if pred_value == 1 else 'unmonetized'][0]
+    pred_proba = round(model.predict_proba(case.reshape(1,-1))[0][pred_value]*100,2)
+
+    return render(request, 'control2.html',
+                  {'patent_number':patent_num,
+                   'family_size':case[0], 'fcit':case[1],'ipr':ipr, 
+                   'reissue':reissue or reissued,'pred_class':pred_class,
+                   'pred_proba':pred_proba})
