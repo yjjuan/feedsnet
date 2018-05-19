@@ -1,0 +1,48 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Monetiz Advisor</title>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/bullet.js"></script>
+</head>
+<body>
+<h1><u>Patent Profile</u></h1>
+<blockquote>Patent number: {{patent_number}}
+<table border="1">
+    <tr>
+        <th>Family Size</th>
+        <th>Forward citations(citedby_patent_count)</th>
+		<th>Inter-parte review(IPR)</th>
+		<th>Reissue</th>
+    </tr>
+	<tr>
+        <td>{{family_size}}</td>
+		<td>{{fcit}}</td>
+ 		<td>{{ipr}}</td>
+		<td>{{reissue}}</td>		
+    </tr>
+
+</table>
+</blockquote>
+<hr>
+
+<h1><u>Monetization Prediction</u></h2>
+<h2>Model selection</h2>
+<ul>
+<li>Model {{model_name|safe}} is used to predict the monetizaition(assignment or licensing) of this patent.</li>
+<li>Model {{model_name|safe}} is trained on the patents w/ IPC = {{model_desc|safe}}</li>
+</ul>
+
+<h2>Prediction results</h2>
+<blockquote>This patent will be {{pred_class|safe}}. (Probability:{{pred_proba|safe}} %)
+</blockquote>
+<form method=post action="/"> {% csrf_token %} 
+  <div>  
+	  <input type=submit value='Try a new case' name='submit_btn'>
+  </div>
+</form>
+<hr>
+
+</body>
+</html>

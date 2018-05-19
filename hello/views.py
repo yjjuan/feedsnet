@@ -210,7 +210,7 @@ def control_2(request):
     
     model = pickle.load(open(os.path.join(cur_dir,
                       'classifier_mix.pickle'), 'rb'))  
-
+    
     #### Start to vectorize this patent
     resp = ifi_fcit(ucid)
     fcit = len(resp['citations'][0]['ucids'])
