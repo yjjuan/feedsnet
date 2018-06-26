@@ -12,7 +12,9 @@ django-heroku = "*"
 requests = "*"
 numpy = "*"
 lime = "*"
-
+nltk = "*"
+tinydb = "*"
+scikit-learn = "*"
 [requires]
 
 python_version = "3.6"
