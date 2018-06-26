@@ -17,6 +17,7 @@ tinydb = "*"
 scikit-learn = "*"
 keras = "*"
 uspto-opendata-python = "*"
+tensorflow = "*"
 [requires]
 
 python_version = "3.6"
