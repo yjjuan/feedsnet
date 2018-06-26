@@ -4,41 +4,46 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Monetiz Advisor</title>
+<title>Prosecutor</title>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/bullet.js"></script>
 </head>
 <body>
-<h1><u>Patent Profile</u></h1>
-<blockquote>Patent number: {{patent_number}}
-<table border="1">
+<h1><u>Profile of your office action:</u></h1>
+<blockquote>
+<p><table id='first' border="1">
+</table>
+<p><table border="1">
     <tr>
-        <th>Family Size</th>
-        <th>Forward citations(citedby_patent_count)</th>
-		<th>Inter-parte review(IPR)</th>
-		<th>Reissue</th>
+        <th>Portion of claims rejected by USC 101</th>
+		<th>Portion of claims rejected by USC 102</th>
+		<th>Portion of claims rejected by USC 103</th>
     </tr>
 	<tr>
-        <td>{{family_size}}</td>
-		<td>{{fcit}}</td>
- 		<td>{{ipr}}</td>
-		<td>{{reissue}}</td>		
-    </tr>
 
+		<td>{{claims_ratio101}}</td>
+ 		<td>{{claims_ratio102}}</td>
+		<td>{{claims_ratio103}}</td>		
+    </tr>
+</table>
+</blockquote>
+
+<h1><u>Profile of your claims:</u></h1>
+<blockquote>
+<table id='second' border="1">
 </table>
 </blockquote>
 <hr>
 
-<h1><u>Monetization Prediction</u></h2>
+<h1><u>Prosecution Prediction</u></h1>
 <h2>Model selection</h2>
 <ul>
-<li>Model {{model_name}} is used to predict the monetizaition(assignment or licensing) of this patent.</li>
-<li>Model {{model_name}} is trained on the patents w/ IPC = {{model_desc}}</li>
+<li>Model is trained on the {{exam_counts}} records in {{examiner_name}}'s examination history by {{model_date}}</li>
 </ul>
 
-<h2>Prediction results</h2>
-<blockquote>This patent will be {{pred_class}}. (Probability:{{pred_proba}} %)
+<h2>Predicted result</h2>
+<blockquote>The grant probability of these claims is {{grant_proba}}. 
 </blockquote>
 <hr>
 
@@ -49,6 +54,10 @@
 slightly high:Value lies between top 25% and 50%;<br>slightly low: within bottom 25% and 50%;
 <br>low:within bottom 25%;<br>very low: below the minimum</blockquote>
 
+<h1><u>Model Monitor</u></h1>
+
+  <table id="third" border="1">
+  </table>
 <form method=post action="/"> {% csrf_token %} 
 
   <div>  
@@ -57,10 +66,68 @@ slightly high:Value lies between top 25% and 50%;<br>slightly low: within bottom
 </form>
 <hr>
 <script>
-var desc_mon = {{desc_mon|safe}};
-var desc_unmon = {{desc_unmon|safe}};
-var weight_mon = {{weight_mon|safe}};
-var weight_unmon = {{weight_unmon|safe}};
+var desc_grant = {{desc_grant|safe}};
+var desc_rej = {{desc_rej|safe}};
+var weight_grant = {{weight_grant|safe}};
+var weight_rej = {{weight_rej|safe}};
+
+var pend_app = {{pend_app|safe}};
+var pend_proba = {{pend_proba|safe}};
+var pend_now = {{pend_now|safe}};
+
+// Table for prior arts and hit rates
+var prior_arts = {{prior_arts|safe}}; //variables used
+var hit_rate = {{hit_rate|safe}};
+var tr_set1,td_set1;
+var ex_name = '{{examiner_name}}';
+tr_set1 = "<tr><th>Prior art cited by examiner</th><th>Keywords hit rate between your claims and prior art</th><th>Examiner</th></tr>";//heading row
+td_set1 = "";//initial data for each row
+for(i=0;i<prior_arts.length;i++){//loop runs to insert 5 rows in table
+
+  td_set1 = td_set1 + "<td>" + prior_arts[i]+"</td>"+"<td>" + hit_rate[i]+"</td>"+"<td>" + ex_name +"</td>";//storing data in each td
+  tr_set1 = tr_set1 + "<tr>" + td_set1 +"</tr>";//inserting 4 data in each row
+  td_set1="";//initialising data for next row
+};
+$("#first").html(tr_set1);//selecting table and inserting the row set
+
+// Table for claim content
+var claims = {{claims|safe}};
+//tr_set = "<tr><th>Pending application(Lastly checked on {})</th><th>Grant Probability</th><th>Predicted Outcome</th><th>Actual Outcome(Lastly checked on )</th></tr>";//heading row
+tr_set = "";
+td_set = "";//initial data for each row
+for(i=0;i<claims.length;i++){//loop runs to insert 5 rows in table
+
+  td_set = td_set + "<td>" + (i+1)+"</td>"+"<td>" + claims[i]+"</td>";//storing data in each td
+  tr_set = tr_set + "<tr>" + td_set +"</tr>";//inserting 4 data in each row
+  td_set="";//initialising data for next row
+};
+$("#second").html(tr_set);//selecting table and inserting the row set
+
+
+// Table for Model Monitor
+var row_set,td_set,i,j; //variables used
+var outcome;
+var status_now;
+tr_set = "<tr><th>Pending application(Lastly checked on {})</th><th>Grant Probability</th><th>Predicted Outcome</th><th>Actual Outcome(Lastly checked on )</th></tr>";//heading row
+td_set = "";//initial data for each row
+for(i=0;i<pend_app.length;i++){//loop runs to insert 5 rows in table
+  if ( pend_proba[i] < 0.5) {
+    outcome = "Rejected";
+} else {
+    outcome = "Granted";
+};
+    if ( pend_now[i] == 1) {
+    status_now = "Granted";
+} else if (pend_now[i] == 0){
+    status_now = "Rejected";
+} else {
+	status_now = "Still pending";
+};
+  td_set = td_set + "<td>" + pend_app[i]+"</td>"+"<td>" + pend_proba[i]+"</td>"+"<td>" + outcome+"</td>"+"<td>" + status_now+"</td>";//storing data in each td
+  tr_set = tr_set + "<tr>" + td_set +"</tr>";//inserting 4 data in each row
+  td_set="";//initialising data for next row
+};
+$("#third").html(tr_set);//selecting table and inserting the row set
 
 $(function(){
 Highcharts.chart('container', {
@@ -75,9 +142,9 @@ Highcharts.chart('container', {
   },
   xAxis: [{
     title: {
-      text: 'Unmonetization Factors'
+      text: 'Rejection Factors'
     },
-    categories: desc_unmon,
+    categories: desc_rej,
     reversed: false,
     labels: {
       step: 1,
@@ -87,11 +154,11 @@ Highcharts.chart('container', {
     }
   }, { // mirror axis on right side
     title: {
-      text: 'Monetization Factors'
+      text: 'Grant Factors'
     },
     opposite: true,
     reversed: false,
-    categories: desc_mon,
+    categories: desc_grant,
     linkedTo: 0,
     labels: {
       step: 1,
@@ -128,12 +195,12 @@ Highcharts.chart('container', {
 		reversed: true
     },
   series: [{
-    name: 'Mon',
-    data: weight_mon,
+    name: 'Granted',
+    data: weight_grant,
 	color: '#FF0000'
   }, {
-    name: 'Unmon',
-    data: weight_unmon,
+    name: 'Rejected',
+    data: weight_rej,
 	color: '#00FF19'
   }]
 });

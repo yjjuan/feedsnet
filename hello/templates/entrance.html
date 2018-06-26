@@ -1,34 +1,70 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Patent Monetiz</title>
-	
-  </head>
-  <body>
+	<head>
+	<meta charset="UTF-8" />
+	<title>Prosecutor</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/bullet.js"></script>
+	</head>
+<body>
 
-<h2>Report1:Please enter your US grant patent number: e.g.7341542, 8409861</h2>
+  <h2>Please enter some information about your claims:</h2>
+  <br> Text of your claims
+  <br><button id="add">Add more claim</button></br>
 <form method=post action="/result/"> {% csrf_token %} 
 
-  <div>
-	  <input type="text" name="patent_number"><br>
-	  <input type=submit value='Submit' name='submit_btn'>
+  <div id="claims">
+	  <br> Claim 1
+	  <br><textarea rows="10" cols="100" name="claim1_text"></textarea></br>
+	  <br> Claim 2
+	  <br><textarea rows="10" cols="100" name="claim2_text"></textarea></br>	  
+	  <br> Claim 3
+	  <br><textarea rows="10" cols="100" name="claim3_text"></textarea></br>
+	  
   </div>
-</form>
-<h2>Report2:Please enter your US grant patent number: e.g.7341542, 8409861</h2>
-<form method=post action="/control_1/"> {% csrf_token %} 
+  
+  <br>Total number of claims in your application
+  <div>
+	  <input type="text" name="total_claims"><br>
+	  
+  </div>  
 
+  <h2>Please enter some information about your office action:</h2>
+  <br>Examiner's name
   <div>
-	  <input type="text" name="patent_number"><br>
-	  <input type=submit value='Submit' name='submit_btn'>
+	  <input type="text" name="examiner_name"><br>
   </div>
+  <br>US publication/issue numbers cited for USC 101 or 102 in this office action (Use comma to separate if there are more than one patents)
+  <div>
+	  <input type="text" name="prior_arts"><br>
+  </div>  
+  <br>Total number of claims rejected by USC 101 (Use comma to separate if there are more than one OAs)
+  <div>
+	  <input type="text" name="claims101"><br>
+  </div>
+  <br>Total number of claims rejected by USC 102(Use comma to separate if there are more than one OAs)
+  <div>
+	  <input type="text" name="claims102"><br>
+  </div> 
+  <br>Total number of claims rejected by USC 103 (Use comma to separate if there are more than one OAs)
+  <div>
+	  <input type="text" name="claims103"><br>
+	  
+  </div>
+  <input type=submit value='Submit' name='submit_btn'>
 </form>
-<h2>Report3:Please enter your US grant patent number: e.g.7341542, 8409861</h2>
-<form method=post action="/control_2/"> {% csrf_token %} 
+<script>
+var insert_textarea;
+var number = 4;
 
-  <div>
-	  <input type="text" name="patent_number"><br>
-	  <input type=submit value='Submit' name='submit_btn'>
-  </div>
-</form>
+insert_textarea = '<textarea rows="10" cols="100">'+number+'</textarea>';
+$("#add").click(function(){//when add button is clicked
+  insert_textarea = '<br>Claim '+number+'<br><textarea rows="10" cols="100" name="claim'+number+'_text"></textarea></br>';
+  $("#claims").append(insert_textarea);//appending new row to table
+  number = number+1;
+});
+</script>
+
   </body>
 </html>

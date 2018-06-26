@@ -28,12 +28,12 @@ class explainer:
         predict_fn = lambda x: model.predict_proba(x).astype(float)
         
         exp = self.explainer.explain_instance(user_case, predict_fn, num_features=num_features)
-        print(exp.__dict__)
+        #print(exp.__dict__)
       
         final_exp = dict()
         idx_list = [i[0] for i in exp.__dict__['local_exp'][1]]
         weight_list = [i[1] for i in exp.__dict__['local_exp'][1]]
-        for i in idx_list:
+        for i, weight in zip(idx_list, weight_list):
             final_exp[i] = dict()
             if i in self.categorical_features:
                 original_desc = exp.__dict__['domain_mapper'].__dict__['discretized_feature_names'][i]
@@ -64,4 +64,4 @@ class explainer:
             final_exp[i]['weight'] = weight
                
         #print(final_exp)   
-        return exp.__dict__['local_exp'][1]
+        return final_exp

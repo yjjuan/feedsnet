@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script> <!-- jquery included -->
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+  <table border="1">
+   <tr>
+    <th>Firstname</th>
+    <th>Lastname</th> 
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td>Firstname</td>
+    <td>Lastname</td> 
+    <td>Age</td>
+  </tr>
+  </table>
+  <table id="second" border="1">
+  </table>
+  <br/>
+  <button id="add">Add</button>
+  <button id="remove">Remove</button>
+</body>
+<script>
+var row_set,td_set,i,j; //variables used
+tr_set = "<tr><th>Item</th><th>Name</th><th>Price</th><th>Quantity</th><th>Total</th></tr>";//heading row
+td_set = "";//initial data for each row
+for(i=1;i<=5;i++){//loop runs to insert 5 rows in table
+  for(j=1;j<=5;j++)//loop that takes 5 data for each row
+    td_set = td_set + "<td>data</td>";//storing data in each td
+  //inner loop ends
+  tr_set = tr_set + "<tr>" + td_set +"</tr>";//inserting 5 data in each row
+  td_set="";//initialising data for next row
+}
+$("#second").html(tr_set);//selecting table and inserting the row set
+
+</script>
+</html>
