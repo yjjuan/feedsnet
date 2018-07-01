@@ -5,8 +5,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import preprocessing
 
-from nltk.corpus import stopwords
-
 import requests
 import urllib
 import json
@@ -135,7 +133,8 @@ def result(request):
     #print(tfidfArray)
     #print (np.nonzero(np.prod(tfidfArray,axis=0)))
     
-    stop = stopwords.words('english')
+    model = pickle.load(open(os.path.join(cur_dir,
+                      'stopwords.pickle'), 'rb'))  
     
     keywords = []
     # tf-idf > 0.2 in at least one document
