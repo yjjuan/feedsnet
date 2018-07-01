@@ -133,7 +133,7 @@ def result(request):
     #print(tfidfArray)
     #print (np.nonzero(np.prod(tfidfArray,axis=0)))
     
-    model = pickle.load(open(os.path.join(cur_dir,
+    stop = pickle.load(open(os.path.join(cur_dir,
                       'stopwords.pickle'), 'rb'))  
     
     keywords = []
