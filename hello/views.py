@@ -5,6 +5,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import preprocessing
 
+from nltk.corpus import stopwords
+
 import requests
 import urllib
 import json
@@ -17,7 +19,7 @@ from tinydb import TinyDB, Query
 
 from keras.models import load_model, model_from_json
 import keras
-from uspto.pbd.client import UsptoPairBulkDataClient
+from uspto.peds.client import UsptoPatentExaminationDataSystemClient
 
 def ifi_querier(q, fl="", start="0", rows="10", sort="", facet=False, facet_field=False, wt='json'):
     params = {
@@ -58,7 +60,7 @@ def ifi_family(ucid):
     return response_in_json 
 
 def status(apn):
-    client = UsptoPairBulkDataClient()
+    client = UsptoPatentExaminationDataSystemClient()
     expression = "applId:" + apn
     result = client.search(expression, start=0,rows=20)
     status_desc = [result['docs'][0]['appStatus']]
@@ -91,11 +93,12 @@ def result(request):
 
     cur_dir = os.path.dirname(__file__)
   
-    #### Select model and training data    
+    #### Select model   
     keras.backend.clear_session() # kill previous model record
-    #print(os.path.join(cur_dir,'bernier.h5'))
+    
     ex_name = request.POST['examiner_name']
-    model = load_model(os.path.join(cur_dir,ex_name+'.h5'))    
+    model = load_model(os.path.join(cur_dir,'model library',ex_name+'.h5'))    
+    print(os.path.join(cur_dir,'model library',ex_name+'.h5'))
     
     #json_string = codecs.open(os.path.join(cur_dir,'model_json.json'), 'r', encoding='utf-8').read()
     #json_string  = json.load(open(os.path.join(cur_dir,'model_json.json')))
@@ -133,8 +136,7 @@ def result(request):
     #print(tfidfArray)
     #print (np.nonzero(np.prod(tfidfArray,axis=0)))
     
-    stop = pickle.load(open(os.path.join(cur_dir,
-                      'stopwords.pickle'), 'rb'))  
+    stop = stopwords.words('english')
     
     keywords = []
     # tf-idf > 0.2 in at least one document
@@ -190,11 +192,11 @@ def result(request):
     
     
     # Explanation part
-    db = TinyDB(os.path.join(cur_dir,'exam2vec_v2.json'))
+    db = TinyDB(os.path.join(cur_dir,'model library',ex_name+'.json'))
     data = db.all()
     
-    x = np.array([i['vec'] for i in data if i['label'] in [0,1]])
-    y = [i['label'] for i in data if i['label'] in [0,1]]
+    x = np.array([i['vec'] for i in data if i['label'] in [0,1] and i['use']==1])
+    y = [i['label'] for i in data if i['label'] in [0,1] and i['use']==1]
     
     
     feature_names = ['Max(hit rate)','Mean(hit rate)','Min(hit rate)',
@@ -221,8 +223,8 @@ def result(request):
     
     # Monitor the prediction over pending applications
     q = Query()
-    pend_app = [i['appNumber'] for i in db.search(q.label == -1)]
-    x_pend = np.array([i['vec'] for i in db.search(q.label == -1)])
+    pend_app = [i['appNumber'] for i in db.search(q.label == -1) if i['use']==1]
+    x_pend = np.array([i['vec'] for i in db.search(q.label == -1) if i['use']==1])
     pend_proba = [round(i[1],2) for i in model.predict(x_pend)]
     pend_now = [status(i) for i in pend_app]
 
