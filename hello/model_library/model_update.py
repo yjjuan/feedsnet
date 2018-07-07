@@ -115,6 +115,7 @@ for i in db.search(q.label == -1)+db.search(q.label == 2):
     if i['label'] != status(i['appNumber']):
         print(i['appNumber'])
         i['label'] = status(i['appNumber'])
+        
 ### Check and update db for new exam records
 apn_old = [i['appNumber'] for i in db.all()]
 apn_new = [i for i in exam_app if i not in apn_old]
