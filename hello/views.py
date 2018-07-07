@@ -136,7 +136,8 @@ def result(request):
     #print(tfidfArray)
     #print (np.nonzero(np.prod(tfidfArray,axis=0)))
     
-    stop = stopwords.words('english')
+    stop = pickle.load(open(os.path.join(cur_dir,
+                                         'stopwords.pickle'),'rb'))
     
     keywords = []
     # tf-idf > 0.2 in at least one document
