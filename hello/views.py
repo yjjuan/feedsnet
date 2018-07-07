@@ -226,9 +226,13 @@ def result(request):
     q = Query()
     pend_app = [i['appNumber'] for i in db.search(q.label == -1) if i['use']==1]
     x_pend = np.array([i['vec'] for i in db.search(q.label == -1) if i['use']==1])
-    pend_proba = [round(i[1],2) for i in model.predict(x_pend)]
-    pend_now = [status(i) for i in pend_app]
-
+    
+    if x_pend.shape != (0,):
+        pend_proba = [round(i[1],2) for i in model.predict(x_pend)]
+        pend_now = [status(i) for i in pend_app]
+    else:
+        pend_proba = []
+        pend_now = []
     
     return render(request, 'highchart7.html',
                   {'model_date':model_date,

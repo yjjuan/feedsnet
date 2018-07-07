@@ -18,6 +18,9 @@ scikit-learn = "*"
 keras = "*"
 uspto-opendata-python = "*"
 tensorflow = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
+
 [requires]
 
 python_version = "3.6"
