@@ -193,7 +193,7 @@ def result(request):
     
     
     # Explanation part
-    db = TinyDB(os.path.join(cur_dir,'model library',ex_name+'.json'))
+    db = TinyDB(os.path.join(cur_dir,'model_library',ex_name+'.json'))
     data = db.all()
     
     x = np.array([i['vec'] for i in data if i['label'] in [0,1] and i['use']==1])
