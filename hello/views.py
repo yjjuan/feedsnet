@@ -97,8 +97,8 @@ def result(request):
     keras.backend.clear_session() # kill previous model record
     
     ex_name = request.POST['examiner_name']
-    model = load_model(os.path.join(cur_dir,'model library',ex_name+'.h5'))    
-    print(os.path.join(cur_dir,'model library',ex_name+'.h5'))
+    model = load_model(os.path.join(cur_dir,'model_library',ex_name+'.h5'))    
+    print(os.path.join(cur_dir,'model_library',ex_name+'.h5'))
     
     #json_string = codecs.open(os.path.join(cur_dir,'model_json.json'), 'r', encoding='utf-8').read()
     #json_string  = json.load(open(os.path.join(cur_dir,'model_json.json')))
