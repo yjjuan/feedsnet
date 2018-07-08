@@ -21,6 +21,11 @@ from keras.models import load_model, model_from_json
 import keras
 from uspto.peds.client import UsptoPatentExaminationDataSystemClient
 
+import psycopg2
+
+#DATABASE_URL = os.environ['DATABASE_URL']
+#conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
 def ifi_querier(q, fl="", start="0", rows="10", sort="", facet=False, facet_field=False, wt='json'):
     params = {
         "q":q,
@@ -98,7 +103,7 @@ def result(request):
     
     ex_name = request.POST['examiner_name']
     model = load_model(os.path.join(cur_dir,'model_library',ex_name+'.h5'))    
-    print(os.path.join(cur_dir,'model_library',ex_name+'.h5'))
+    #print(os.path.join(cur_dir,'model_library',ex_name+'.h5'))
     
     #json_string = codecs.open(os.path.join(cur_dir,'model_json.json'), 'r', encoding='utf-8').read()
     #json_string  = json.load(open(os.path.join(cur_dir,'model_json.json')))
