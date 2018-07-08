@@ -17,6 +17,7 @@ from exam_history_v2 import vectorize
 
 
 from uspto.peds.client import UsptoPatentExaminationDataSystemClient
+from .model import Examiner
 
 from keras.models import load_model, model_from_json
 from keras.utils import to_categorical

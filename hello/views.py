@@ -117,7 +117,10 @@ def result(request):
     print(model.predict(x_test))
     print('test model done...')
         
-    
+    ##
+    cur = conn.cursor()
+    cur.execute("select * from hello_examiner")
+    print(cur.fetchall())
     #### Start to vectorize this exam
     ### keywords hit rate
     ## Load the claim-text
