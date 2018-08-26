@@ -16,6 +16,7 @@ scikit-learn = "*"
 keras = "*"
 tensorflow = "*"
 dj-database-url = "*"
+gensim = "*"
 
 [requires]
 
