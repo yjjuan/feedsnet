@@ -12,14 +12,10 @@ django-heroku = "*"
 requests = "*"
 numpy = "*"
 lime = "*"
-nltk = "*"
-tinydb = "*"
 scikit-learn = "*"
 keras = "*"
-uspto-opendata-python = "*"
 tensorflow = "*"
 dj-database-url = "*"
-psycopg2-binary = "*"
 
 [requires]
 
