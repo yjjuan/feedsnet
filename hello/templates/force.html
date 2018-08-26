@@ -29,12 +29,12 @@
 		height: 200px;
 		overflow: scroll;
 		}
-		.myBox2 {
+		.d3_svg {
 		border: none;
 		padding: 5px;
 		font: 24px/36px sans-serif;
-		width:250px;
-		height: 200px;
+		width:1000px;
+		height: 800px;
 		overflow: scroll;
 		}
 		/* Scrollbar styles */
@@ -60,8 +60,11 @@
 		</style>
 	</head>
 	<body>
-		<input id="search">
-		<button type="button" onclick="searchNode()">Search</button>
+		<div>
+			Search to highlight a particular keyword or patent
+			<input id="search">
+			<button type="button" onclick="searchNode()">Search</button>
+		</div>
 		<div class="myBox">
 			<table id="kws"></table>
 		</div>
