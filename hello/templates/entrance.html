@@ -2,55 +2,17 @@
 <html>
 	<head>
 	<meta charset="UTF-8" />
-	<title>Prosecutor</title>
+	<title>Patent Network</title>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/bullet.js"></script>
 	</head>
 <body>
-
-  <h2>Please enter some information about your claims:</h2>
-  <br> Text of your claims
-  <br><button id="add">Add more claim</button></br>
+  <h2>Please enter techincal fields:</h2>
+  <br>
 <form method=post action="/result/"> {% csrf_token %} 
-
-  <div id="claims">
-	  <br> Claim 1
-	  <br><textarea rows="10" cols="100" name="claim1_text"></textarea></br>
-	  <br> Claim 2
-	  <br><textarea rows="10" cols="100" name="claim2_text"></textarea></br>	  
-	  <br> Claim 3
-	  <br><textarea rows="10" cols="100" name="claim3_text"></textarea></br>
-	  
-  </div>
-  
-  <br>Total number of claims in your application
   <div>
-	  <input type="text" name="total_claims"><br>
-	  
-  </div>  
-
-  <h2>Please enter some information about your office action:</h2>
-  <br>Examiner's name
-  <div>
-	  <input type="text" name="examiner_name"><br>
-  </div>
-  <br>US publication/issue numbers cited for USC 101 or 102 in this office action (Use comma to separate if there are more than one patents)
-  <div>
-	  <input type="text" name="prior_arts"><br>
-  </div>  
-  <br>Total number of claims rejected by USC 101 (Use comma to separate if there are more than one OAs)
-  <div>
-	  <input type="text" name="claims101"><br>
-  </div>
-  <br>Total number of claims rejected by USC 102(Use comma to separate if there are more than one OAs)
-  <div>
-	  <input type="text" name="claims102"><br>
-  </div> 
-  <br>Total number of claims rejected by USC 103 (Use comma to separate if there are more than one OAs)
-  <div>
-	  <input type="text" name="claims103"><br>
-	  
+	  <input type="text" name="query"><br>
   </div>
   <input type=submit value='Submit' name='submit_btn'>
 </form>
