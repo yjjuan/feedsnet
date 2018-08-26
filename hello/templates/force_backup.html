@@ -21,7 +21,6 @@
 
 		/* Box styles */
 		.myBox {
-		display: inline-block;
 		border: none;
 		padding: 5px;
 		font: 24px/36px sans-serif;
@@ -63,12 +62,17 @@
 		<input id="search">
 		<button type="button" onclick="searchNode()">Search</button>
 		<div class="myBox">
+
 			<table id="kws"></table>
+
 		</div>
-		<div class="myBox">
-			<table id="ucids"></table>
+		<div class="myBox2">
+			<table>
+			<tr>
+			<td><table id="ucids"></table></td>
+			</tr>
+			</table>
 		</div>
-		<div class="d3_svg"></div>
 		<script type="text/javascript">
 
 			//Width and height
@@ -111,7 +115,7 @@
 			var colors = d3.scaleOrdinal(d3.schemeCategory10);
 
 			//Create SVG element
-			var svg = d3.select(".d3_svg")
+			var svg = d3.select("div")
 						.append("svg")
 						.attr("width", w)
 						.attr("height", h);
