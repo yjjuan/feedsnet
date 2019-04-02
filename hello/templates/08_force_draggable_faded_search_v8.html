@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Patent-Concpet Hybrid Network</title>
+		<script type="text/javascript" src="../d3.js"></script>
+		<style type="text/css">
+			/* No style rules here yet */
+			table,th,td {
+			  border : 1px solid black;
+			  border-collapse: collapse;
+			}
+			th,td {
+			  padding: 0.1px;
+			}
+			/* Force scrollbars onto browser window */
+		body {
+		margin-bottom: 200%;
+		}
+
+		/* Box styles */
+		.myBox {
+		border: none;
+		padding: 5px;
+		font: 24px/36px sans-serif;
+		width:250px;
+		height: 200px;
+		overflow: scroll;
+		}
+		.myBox2 {
+		border: none;
+		padding: 5px;
+		font: 24px/36px sans-serif;
+		width:250px;
+		height: 200px;
+		overflow: scroll;
+		}
+		/* Scrollbar styles */
+		::-webkit-scrollbar {
+		width: 12px;
+		height: 12px;
+		}
+
+		::-webkit-scrollbar-track {
+		box-shadow: inset 0 0 10px olivedrab;
+		border-radius: 10px;
+		}
+
+		::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background: yellowgreen; 
+		box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+		}
+
+		::-webkit-scrollbar-thumb:hover {
+		background: #7bac10;
+		}
+		</style>
+	</head>
+	<body>
+		<input id="search">
+		<button type="button" onclick="searchNode()">Search</button>
+		<div class="myBox">
+
+			<table id="kws"></table>
+
+		</div>
+		<div class="myBox2">
+			<table>
+			<tr>
+			<td><table id="ucids"></table></td>
+			</tr>
+			</table>
+		</div>
+		<div id="print"></div>
+		<script type="text/javascript">
+
+			//Width and height
+			var w = 800;
+			var h = 600;
+
+			//Original data
+
+			var dataset = {nodes: [{name: 'microfluidic', group: 1},
+									  {name: 'different', group: 1},
+									  {name: 'reflective', group: 1},
+									  {name: 'delivery', group: 1},
+									  {name: 'heating', group: 1},
+									  {name: 'cause', group: 1},
+									  {name: 'fluid', group: 1},
+									  {name: 'channels', group: 1},
+									  {name: 'sequential', group: 1},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2},
+									  {name: 'US-9737890-B2', group: 2}],
+									 edges: [{source: 0, target: 9},
+									  {source: 0, target: 10},
+									  {source: 0, target: 11},
+									  {source: 0, target: 12},
+									  {source: 0, target: 13},
+									  {source: 0, target: 14},
+									  {source: 0, target: 15},
+									  {source: 0, target: 17},
+									  {source: 0, target: 18},
+									  {source: 1, target: 13},
+									  {source: 1, target: 14},
+									  {source: 1, target: 15},
+									  {source: 2, target: 12},
+									  {source: 3, target: 15},
+									  {source: 4, target: 10},
+									  {source: 5, target: 14},
+									  {source: 6, target: 13},
+									  {source: 6, target: 15},
+									  {source: 6, target: 16},
+									  {source: 6, target: 17},
+									  {source: 7, target: 12},
+									  {source: 7, target: 13},
+									  {source: 7, target: 15},
+									  {source: 7, target: 16},
+									  {source: 7, target: 17},
+									  {source: 8, target: 14}]};
+
+			
+			// table
+			var table="<tr><th>Keywords</th></tr>";
+			  for (i = 0; i <dataset.nodes.length; i++) {
+				if (dataset.nodes[i].group==1){
+					table += "<tr><td>" +
+					dataset.nodes[i].name +
+					"</td></tr>";
+				}
+
+			  }		
+			var table2="<tr><th>patent number</th></tr>";
+			  for (i = 0; i <dataset.nodes.length; i++) {
+				if (dataset.nodes[i].group==2){
+					table2 += "<tr><td>" +
+					dataset.nodes[i].name +
+					"</td></tr>";
+				}
+
+			  }					  
+			document.getElementById("kws").innerHTML = table;
+			document.getElementById("ucids").innerHTML = table2;
+			
+			//Initialize a simple force layout, using the nodes and edges in dataset
+			var force = d3.forceSimulation(dataset.nodes)
+						  .force("charge", d3.forceManyBody())
+						  .force("link", d3.forceLink(dataset.edges))
+						  .force("center", d3.forceCenter().x(w/2).y(h/2));
+
+			var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+			
+			//Create edges as lines
+			var edges = svg.selectAll("line")
+				.data(dataset.edges)
+				.enter()
+				.append("line")
+				.style("stroke", "#ccc")
+				.style("stroke-width", 1);
+			
+			//Create nodes as circles
+			var nodes = svg.selectAll("circle")
+				.data(dataset.nodes)
+				.enter()
+				.append("circle")
+				.attr("r", 10)
+				.style("fill", function(d) {
+					return colors(d.group);
+				})
+				.call(d3.drag()  //Define what to do on drag events
+					.on("start", dragStarted)
+					.on("drag", dragging)
+					.on("end", dragEnded))
+						.on('dblclick', connectedNodes);
+
+			var textElements = svg.append("g")
+			  .attr("class", "texts")
+			  .selectAll("text")
+			  .data(dataset.nodes)
+			  .enter().append("text")
+				.text(function (d) { 
+									if (d.group == 1){
+										return d.name;
+									}})
+				  .attr("font-size", 18)
+				  .attr("dx", 15)
+				.attr("dy", 4);			
+				
+			//Add a simple tooltip
+			nodes.append("title")
+				 .text(function(d) {
+					return d.name;
+				 });
+			
+			//Every time the simulation "ticks", this will be called
+			force.on("tick", function() {
+
+				edges.attr("x1", function(d) { return d.source.x; })
+					 .attr("y1", function(d) { return d.source.y; })
+					 .attr("x2", function(d) { return d.target.x; })
+					 .attr("y2", function(d) { return d.target.y; });
+			
+				nodes.attr("cx", function(d) { return d.x; })
+					 .attr("cy", function(d) { return d.y; });
+				textElements
+				  .attr('x', function (node) { return node.x ;})
+				  .attr('y', function (node) { return node.y ;});
+
+			});
+
+			//Define drag event functions
+			function dragStarted(d) {
+				if (!d3.event.active) force.alphaTarget(0.3).restart();
+				d.fx = d.x;
+				d.fy = d.y;
+			}
+
+			function dragging(d) {
+				d.fx = d3.event.x;
+				d.fy = d3.event.y;
+			}
+
+			function dragEnded(d) {
+				if (!d3.event.active) force.alphaTarget(0);
+				d.fx = null;
+				d.fy = null;
+			}
+			//Toggle stores whether the highlighting is on
+			var toggle = 0;
+			//Create an array logging what is connected to what
+			var linkedByIndex = {};
+			for (i = 0; i < dataset.nodes.length; i++) {
+				linkedByIndex[i + "," + i] = 1;
+			};
+			dataset.edges.forEach(function (d) {
+				linkedByIndex[d.source.index + "," + d.target.index] = 1;
+			});
+			//This function looks up whether a pair are neighbours
+			function neighboring(a, b) {
+				return linkedByIndex[a.index + "," + b.index];
+			}
+			function connectedNodes() {
+				if (toggle == 0) {
+					//Reduce the opacity of all but the neighbouring nodes
+					d = d3.select(this).node().__data__;
+					//document.getElementById("print").innerHTML = Object.keys(d);
+					nodes.style("opacity", function (o) {
+						return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+					});
+					edges.style("opacity", function (o) {
+						return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+					});
+					//Reduce the op
+					toggle = 1;
+				} else {
+					//Put them back to opacity=1
+					nodes.style("opacity", 1);
+					edges.style("opacity", 1);
+					toggle = 0;
+				}
+			}
+						var optArray = [];
+			for (var i = 0; i < dataset.nodes.length - 1; i++) {
+				optArray.push(dataset.nodes[i].name);
+			}
+			
+			optArray = optArray.sort();
+			$(function () {
+				$("#search").autocomplete({
+					source: optArray
+				});
+			});
+			function searchNode() {
+				//find the node
+				var selectedVal = document.getElementById('search').value;
+				var node = svg.selectAll("circle");
+				if (selectedVal == "none") {
+					node.style("stroke", "white").style("stroke-width", "1");
+				} else {
+					var selected = node.filter(function (d, i) {
+						return d.name != selectedVal;
+					});
+					var tar = d3.selectAll("circle").filter(function (d, i) {
+						return d.name == selectedVal;
+					}).node().__data__;
+					var targeted = node.filter(function (d, i) {
+						return d.name == selectedVal;
+					});	
+					//document.getElementById("print").innerHTML = Object.keys(tar);
+					//selected.style("opacity", "0"); // turn off the irrelevant nodes
+					//var link = svg.selectAll("line")
+					//link.style("opacity", "0");
+					
+					
+					//Reduce the opacity of all but the neighbouring nodes
+					d = tar;
+					nodes.style("opacity", function (o) {
+						return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+					});
+					edges.style("opacity", function (o) {
+						return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+					});
+					//Reduce the op
+					//toggle = 1;
+					//d3.selectAll("circle, line").transition()
+					//	.duration(5000)
+					//	.style("opacity", 1);
+				}
+			}
+		</script>
+	</body>
+</html>
