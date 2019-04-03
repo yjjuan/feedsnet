@@ -57,7 +57,8 @@ def result(request):
            'spectrometer', 'spectrogram','recurrent','time series',
            'recommend engine','food security','tea','argriculture','wearable',
            'transfer learning','beer','LSTM', 'sensor fusion',
-           'end-to-end','coffee','retail','iot','image search']
+           'end-to-end','coffee','retail','iot','image search',
+           'anomaly detection']
     #### Count the occurence of kw in each documents by sklearn countvectorizer
     vect = CountVectorizer(vocabulary=kws)
     dtm = vect.fit_transform(absts)
