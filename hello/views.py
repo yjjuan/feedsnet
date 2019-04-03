@@ -38,6 +38,7 @@ def result(request):
     
     ### Feed 2
     feeds = ['https://rss.sciencedirect.com/publication/science/09252312',
+             'http://rss.sciencedirect.com/publication/science/01678655',
              'http://rss.sciencedirect.com/publication/science/01681699',
              'http://feeds.rsc.org/rss/ay',
              'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=11263&channel-name=International+Journal+of+Computer+Vision']
@@ -55,7 +56,7 @@ def result(request):
     kws = ['convolutional','texture','nir','near-infrared',
            'spectrometer', 'spectrogram','recurrent','time series',
            'recommend engine','food security','tea','argriculture','wearable',
-           'transfer learning','beer','LSTM']
+           'transfer learning','beer','LSTM', 'sensor fusion']
     #### Count the occurence of kw in each documents by sklearn countvectorizer
     vect = CountVectorizer(vocabulary=kws)
     dtm = vect.fit_transform(absts)
