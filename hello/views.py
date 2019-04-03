@@ -40,6 +40,7 @@ def result(request):
     feeds = ['https://rss.sciencedirect.com/publication/science/09252312',
              'http://rss.sciencedirect.com/publication/science/01678655',
              'http://rss.sciencedirect.com/publication/science/01681699',
+             'http://rss.sciencedirect.com/publication/science/03088146',
              'http://feeds.rsc.org/rss/ay',
              'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=11263&channel-name=International+Journal+of+Computer+Vision',
              'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=10462&channel-name=Artificial+Intelligence+Review']
