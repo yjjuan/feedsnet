@@ -41,6 +41,7 @@ def result(request):
              'http://rss.sciencedirect.com/publication/science/01678655',
              'http://rss.sciencedirect.com/publication/science/01681699',
              'http://rss.sciencedirect.com/publication/science/03088146',
+             'http://rss.sciencedirect.com/publication/science/09565663',
              'http://feeds.rsc.org/rss/ay',
              'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=11263&channel-name=International+Journal+of+Computer+Vision',
              'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=10462&channel-name=Artificial+Intelligence+Review']
@@ -75,15 +76,27 @@ def result(request):
     
     for i in range(kws_counts):
         targets = np.nonzero(dtm.toarray()[:,i])[0]
-        graph['nodes'].append({'name':kws[i],'group':1})
+        graph['nodes'].append({'name':kws[i],'group':1, 'display':1})
         for t in targets:
             graph['edges'].append({'source':i,'target':t + kws_counts})
     
+    linked_docs = [i['target'] for i in graph['edges']]
+    #print(linked_docs)
     for i in range(docs_counts):
-        graph['nodes'].append({'title':titles[i],'link':links[i],
-             'group':2})
+        doc_node = {'title':titles[i],'link':links[i],'group':2}
+        
+        # Only display the linked nodes
+        node_idx = i+kws_counts
+        #print(node_idx)
+        if node_idx in linked_docs:
+            doc_node['display'] = 1
+        else:
+            doc_node['display'] = 0
+        
+        graph['nodes'].append(doc_node)
+        #print(doc_node)
     
-    return render(request, 'force2.html',
+    return render(request, 'force3.html',
                   {'dataset':graph})
     
     

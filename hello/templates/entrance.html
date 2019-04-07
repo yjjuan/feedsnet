@@ -8,13 +8,10 @@
 	<script src="https://code.highcharts.com/modules/bullet.js"></script>
 	</head>
 <body>
-  <h2>Please enter technology keywords: (e.g. deep learning)</h2>
+  <h2>Click the button to generate feednet</h2>
   <br>
 <form method=post action="/result/"> {% csrf_token %} 
-  <div>
-	  <input type="text" name="query"><br>
-  </div>
-  <input type=submit value='Submit' name='submit_btn'>
+  <input type=submit value='Generate' name='submit_btn'>
 </form>
 <script>
 var insert_textarea;
