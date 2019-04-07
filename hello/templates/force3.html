@@ -20,22 +20,7 @@
 		}
 
 		/* Box styles */
-		.myBox {
-		border: none;
-		padding: 5px;
-		font: 24px/36px sans-serif;
-		width:250px;
-		height: 200px;
-		overflow: scroll;
-		}
-		.myBox2 {
-		border: none;
-		padding: 5px;
-		font: 24px/36px sans-serif;
-		width:250px;
-		height: 200px;
-		overflow: scroll;
-		}
+
 		/* Scrollbar styles */
 		::-webkit-scrollbar {
 		width: 12px;
@@ -61,7 +46,8 @@
 	<body>
 		<input id="search">
 		<button type="button" onclick="searchNode()">Search</button>
-
+		
+		
 		<div id="print"></div>
 		<script type="text/javascript">
 
@@ -95,8 +81,8 @@
 				}
 
 			  }					  
-			document.getElementById("kws").innerHTML = table;
-			document.getElementById("ucids").innerHTML = table2;
+			//document.getElementById("kws").innerHTML = table;
+			//document.getElementById("ucids").innerHTML = table2;
 			
 			//Initialize a simple force layout, using the nodes and edges in dataset
 			var force = d3.forceSimulation(dataset.nodes)
