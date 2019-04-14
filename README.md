@@ -3,8 +3,8 @@
 ## Goal of this work
 <br> Build dashboard from RSS feed of academic journal to identify hot spot and whitespace of technology landscape
 ## What is feednet? How to interpret this network?
-* Tracking keywords, and interesting journal
-* Visualizing keywords co-occurence w/ network
-* Suggesting whitespace by combining published papers
+* Tracking keywords of interest, and interesting journal
+* Visualizing co-occurence between keyword and published papers
+* Suggesting research whitespace by combining published papers
 
 ## Example:
