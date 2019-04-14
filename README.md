@@ -5,5 +5,6 @@
 ## What is feednet? How to interpret this network?
 * Tracking keywords, and interesting journal
 * Visualizing keywords co-occurence w/ network
-* Suggesting whitespace by combining old papers
+* Suggesting whitespace by combining published papers
+
 ## Example:
