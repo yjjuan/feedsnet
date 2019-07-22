@@ -36,16 +36,16 @@ def result(request):
         links.append(node.findall('./{http://purl.org/rss/1.0/}link')[0].text)
         ids.append(idx)
     
-    ### Feed 2
-    feeds = ['https://rss.sciencedirect.com/publication/science/09252312',
-             'http://rss.sciencedirect.com/publication/science/01678655',
-             'http://rss.sciencedirect.com/publication/science/01681699',
-             'http://rss.sciencedirect.com/publication/science/03088146',
-             'http://rss.sciencedirect.com/publication/science/09565663',
+    ### Feed Type 2
+    feeds = [#'https://rss.sciencedirect.com/publication/science/09252312',
+             #'http://rss.sciencedirect.com/publication/science/01678655',
+             #'http://rss.sciencedirect.com/publication/science/01681699',
+             #'http://rss.sciencedirect.com/publication/science/03088146',
+             #'http://rss.sciencedirect.com/publication/science/09565663',
              #'http://rss.sciencedirect.com/publication/science/15662535',
-             #'http://feeds.rsc.org/rss/ay',
-             #'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=11263&channel-name=International+Journal+of+Computer+Vision',
-             #'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=10462&channel-name=Artificial+Intelligence+Review'
+             'http://feeds.rsc.org/rss/ay',
+             'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=11263&channel-name=International+Journal+of+Computer+Vision',
+             'https://link.springer.com/search.rss?facet-content-type=Article&facet-journal-id=10462&channel-name=Artificial+Intelligence+Review'
              ]
     
     for feed in feeds:
