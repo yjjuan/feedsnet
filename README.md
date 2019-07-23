@@ -8,4 +8,5 @@
 * Suggesting research whitespace by combining published papers
 
 ## Example:
+The orange nodes represent the papers w/ specific keywords; blue nodes stand for the keywords of interest.
 ![](/example.png)
