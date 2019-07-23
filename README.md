@@ -8,3 +8,4 @@
 * Suggesting research whitespace by combining published papers
 
 ## Example:
+![GitHub Logo](/feedsnet/example.png)
