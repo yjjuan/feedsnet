@@ -9,4 +9,5 @@
 
 ## Example:
 The orange nodes represent the papers w/ specific keywords; blue nodes stand for the keywords of interest.
+Click the orange nodes to link to the website of that paper.
 ![](/example.png)
